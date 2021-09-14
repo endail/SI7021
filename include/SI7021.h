@@ -62,11 +62,11 @@ struct UserRegister : std::bitset<8> {
     UserRegister(const std::bitset<8> bs) noexcept;
     virtual void resetSettings() = 0;
     std::uint8_t to_uint8_t() const noexcept;
-}
+};
 
 struct UserRegister1 : public UserRegister {
 
-    UserRegister1(const std::uint8_t bits = DEFAULT_SETTINGS_BITS) noexcept;
+    UserRegister1(const std::uint8_t bits = SI7021::DEFAULT_SETTINGS_BITS) noexcept;
 
     std::uint8_t getMeasurementResolution() const noexcept;
     void setMeasurementResolution(const std::uint8_t res);
@@ -81,11 +81,11 @@ struct UserRegister1 : public UserRegister {
 };
 
 struct UserRegister2 : public UserRegister {
-    UserRegister2(const std::uint8_t bits = DEFAULT_HEATER_BITS) noexcept;
+    UserRegister2(const std::uint8_t bits = SI7021::DEFAULT_HEATER_BITS) noexcept;
     std::uint8_t getHeaterPower() const noexcept;
     void setHeaterPower(const uint8_t power);
     void resetSettings() override;
-}
+};
 
 class SI7021 {
 
@@ -113,13 +113,13 @@ protected:
         const std::uint8_t* const cmd,
         const std::size_t cmdLen,
         std::uint8_t* const data,
-        const std::size_t dataLen);
+        const std::size_t dataLen) const;
 
     void _i2cMultiWrite(
         const std::uint8_t* const cmd,
         const std::size_t cmdLen,
         const std::uint8_t* const data = nullptr,
-        const std::size_t dataLen = 0);
+        const std::size_t dataLen = 0) const;
 
     /**
      * https://github.com/d2r2/go-si7021/blob/master/utils.go

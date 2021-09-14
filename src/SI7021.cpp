@@ -24,7 +24,7 @@
 #include <cstring>
 #include <cstdint>
 #include <lgpio.h>
-#include <linux/types.h>
+#include <linux/i2c-dev.h>
 #include <stdexcept>
 
 namespace SI7021 {
@@ -42,10 +42,10 @@ std::uint8_t UserRegister::to_uint8_t() const noexcept {
     return static_cast<std::uint8_t>(this->to_ulong());
 }
 
-UserRegister1(const std::uint8_t bits) noexcept :
+UserRegister1::UserRegister1(const std::uint8_t bits) noexcept :
     UserRegister(bits) { }
 
-std::uint8_t getMeasurementResolution() const noexcept {
+std::uint8_t UserRegister1::getMeasurementResolution() const noexcept {
     return (this->operator[](7) << 1) | this->operator[](0);
 }
 
@@ -53,7 +53,7 @@ void UserRegister1::setMeasurementResolution(const std::uint8_t res) {
 
     //max res is 3
     if(res > 3) {
-        throw std::invalid_argument();
+        throw std::invalid_argument("");
     }
 
     this->operator[](7) = res & 0b00000010;
@@ -73,7 +73,7 @@ void UserRegister1::setHeaterStatus(const HeaterStatus status) noexcept {
     this->operator[](2) = static_cast<bool>(status);
 }
 
-void UserRegister1::resetSettings() override {
+void UserRegister1::resetSettings() {
     this->reset();
     //0011_1010
     this->operator[](5) = true;
@@ -92,7 +92,7 @@ std::uint8_t UserRegister2::getHeaterPower() const noexcept {
 void UserRegister2::setHeaterPower(const uint8_t power) {
 
     if(power > 16) {
-        throw std::invalid_argument();
+        throw std::invalid_argument("");
     }
 
     this->operator[](3) = power & 0b00001000;
@@ -102,7 +102,7 @@ void UserRegister2::setHeaterPower(const uint8_t power) {
 
 }
 
-void UserRegister2::resetSettings() override {
+void UserRegister2::resetSettings() {
     //0000_0000
     this->reset();
 }
@@ -160,10 +160,10 @@ void SI7021::_set_user_reg_2(const UserRegister2* const reg) {
 }
 
 void SI7021::_i2cMultiRead(
-    const std::uint8_t* const cmd,
+    std::uint8_t* const cmd,
     const std::size_t cmdLen,
     std::uint8_t* const data,
-    const std::size_t dataLen) {
+    const std::size_t dataLen) const {
 
         //TODO: need to 0-init?
         ::lgI2cMsg_t segs[2];
@@ -195,7 +195,7 @@ void SI7021::_i2cMultiWrite(
     const std::uint8_t* const cmd,
     const std::size_t cmdLen,
     const std::uint8_t* const data,
-    const std::size_t dataLen) {
+    const std::size_t dataLen) const {
 
         ::lgI2cMsg_t seg;
 
@@ -213,7 +213,7 @@ void SI7021::_i2cMultiWrite(
             &seg,
             1);
 
-        if(code != sizeof(segs)) {
+        if(code != 1) {
             throw std::runtime_error("");
         }
 
@@ -274,7 +274,7 @@ void SI7021::close() {
 
 void SI7021::refresh() {
 
-    std::uint8_t data[3]{0};
+    char data[3]{0};
 
     int code = ::lgI2cReadI2CBlockData(
         this->_handle,
@@ -339,7 +339,7 @@ void SI7021::resetHeater() {
 }
 
 std::uint8_t SI7021::getMeasurementResolution() const {
-    this->_read_user_reg_1().getMeasurementResolution();
+    return this->_read_user_reg_1().getMeasurementResolution();
 }
 
 void SI7021::setMeasurementResolution(const std::uint8_t res) {
@@ -361,7 +361,7 @@ std::uint8_t SI7021::getHeaterPower() const {
 }
 
 void SI7021::setHeaterPower(const std::uint8_t power) {
-    auto reg = UserRegister2;
+    UserRegister2 reg;
     reg.setHeaterPower(power);
     this->_set_user_reg_2(&reg);
 }
@@ -369,7 +369,7 @@ void SI7021::setHeaterPower(const std::uint8_t power) {
 void SI7021::setHeaterStatus(const HeaterStatus status) {
     auto reg = this->_read_user_reg_1();
     reg.setHeaterStatus(status);
-    this->_set_user_reg_1(bits);
+    this->_set_user_reg_1(&reg);
 }
 
 SerialNumber SI7021::getSerialNumber() const {
