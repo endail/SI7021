@@ -29,6 +29,99 @@
 
 namespace SI7021 {
 
+struct UserRegister : std::bitset<8> {
+
+    UserRegister() noexcept :
+        UserRegister(0) { }
+
+    UserRegister(const std::uint8_t v) noexcept :
+        std::bitset<8>(v) { }
+
+    UserRegister(const std::bitset<8> bs) noexcept :
+        UserRegister(static_cast<std::uint8_t>(bs.to_ulong())) { }
+
+    virtual void resetSettings() = 0;
+
+    std::uint8_t to_uint8_t() const noexcept {
+        return static_cast<std::uint8_t>(this->to_ulong());
+    }
+
+}
+
+struct UserRegister1 : public UserRegister {
+
+    UserRegister1(const std::uint8_t bits) noexcept :
+        UserRegister(bits) { }
+
+    std::uint8_t getMeasurementResolution() const noexcept {
+        return (this->operator[](7) << 1) | this->operator[](0);
+    }
+
+    void setMeasurementResolution(const std::uint8_t res) {
+
+        //max res is 3
+        if(res > 3) {
+            throw std::invalid_argument();
+        }
+
+        this->operator[](7) = res & 0b00000010;
+        this->operator[](0) = res & 0b00000001;
+    
+    }
+
+    VddStatus getVddStatus() const noexcept {
+        return static_cast<VddStatus>(this->operator[](6));
+    }
+
+    HeaterStatus getHeaterStatus() const noexcept {
+        return static_cast<HeaterStatus>(this->operator[](2));
+    }
+
+    void setHeaterStatus(const HeaterStatus status) noexcept {
+        this->operator[](2) = static_cast<bool>(status);
+    }
+
+    void resetSettings() override {
+        this->reset();
+        //0011_1010
+        this->operator[](5) = true;
+        this->operator[](4) = true;
+        this->operator[](3) = true;
+        this->operator[](1) = true;
+    }
+
+};
+
+struct UserRegister2 : public UserRegister {
+
+    UserRegister2(const std::uint8_t bits) noexcept :
+        UserRegister(bits) { }
+
+    std::uint8_t getHeaterPower() const noexcept {
+        return this->to_ulong() & 0b00001111;
+    }
+
+    void setHeaterPower(const uint8_t power) {
+        
+        if(power > 16) {
+            throw std::invalid_argument();
+        }
+
+        this->operator[](3) = power & 0b00001000;
+        this->operator[](2) = power & 0b00000100;
+        this->operator[](1) = power & 0b00000010;
+        this->operator[](0) = power & 0b00000001;
+
+    }
+
+    void resetSettings() override {
+        //0000_0000
+        this->reset();
+    }
+
+}
+
+
 UserRegister1 SI7021::_read_user_reg_1() const {
 
     std::uint8_t b = 0;
