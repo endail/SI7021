@@ -217,8 +217,8 @@ public:
     SI7021(const int dev = I2C_DEV, const int addr = IC2_ADDR) noexcept;
     virtual ~SI7021();
 
-    bool setup();
-    bool close();
+    void setup();
+    void close();
 
     /**
      * Measurement takes time depending on bit resolution

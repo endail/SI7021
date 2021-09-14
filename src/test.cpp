@@ -20,10 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../include/template.h"
-#include <cstdint>
-#include <lgpio.h>
+#include <iostream>
+#include "../include/SI7021.h"
 
-namespace template {
+int main() {
 
-};
+    SI7021::SI7021 sensor;
+
+    sensor.setup();
+    sensor.refresh();
+
+    std::cout << sensor.getTemperature() << std::endl;
+    std::cout << sensor.getHumidity() << std::endl;
+
+    return 0;
+
+}
