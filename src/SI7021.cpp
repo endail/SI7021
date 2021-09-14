@@ -27,7 +27,7 @@
 #include <linux/types.h>
 #include <stdexcept>
 
-namespace PiPlants {
+namespace SI7021 {
 
 UserRegister1 SI7021::_read_user_reg_1() const {
 
