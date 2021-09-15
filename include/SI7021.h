@@ -194,7 +194,7 @@ public:
     DeviceId getDeviceId() const;
     FirmwareRevision getFirmwareRevision() const;
 
-    static std::string devIdToString(const DeviceId id) noexcept;
+    static std::string devIdToString(const DeviceId id) noexcept
     static std::string firmwareRevToString(const FirmwareRevision rev) noexcept;
 
 };

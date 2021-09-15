@@ -37,10 +37,10 @@ int main() {
     std::cout
 
         << "Device: "
-        << SI7021::devIdToString(sensor.getDeviceId()) << "\n"
+        << SI7021::SI7021::devIdToString(sensor.getDeviceId()) << "\n"
 
         << "Firmware: "
-        << SI7021::firmwareRevToString(sensor.getFirmwareRevision()) << "\n"
+        << SI7021::SI7021::firmwareRevToString(sensor.getFirmwareRevision()) << "\n"
         
         << "Serial Number: "
         << sensor.getSerialNumber() << "\n"
