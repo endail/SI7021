@@ -36,14 +36,14 @@ int main() {
 
     std::cout
 
-        << "Device: "
-        << SI7021::SI7021::devIdToString(sensor.getDeviceId()) << "\n"
+        //<< "Device: "
+        //<< SI7021::SI7021::devIdToString(sensor.getDeviceId()) << "\n"
 
-        << "Firmware: "
-        << SI7021::SI7021::firmwareRevToString(sensor.getFirmwareRevision()) << "\n"
+        //<< "Firmware: "
+        //<< SI7021::SI7021::firmwareRevToString(sensor.getFirmwareRevision()) << "\n"
         
-        << "Serial Number: "
-        << sensor.getSerialNumber() << "\n"
+        //<< "Serial Number: "
+        //<< sensor.getSerialNumber() << "\n"
         
         << "Vdd Status: "
         << (sensor.getVddStatus() == VddStatus::OK ? "OK" : "Low") << "\n"
