@@ -221,7 +221,7 @@ void SI7021::_i2cMultiWrite(
 
 std::uint8_t SI7021::_calc_checksum(
     std::uint8_t seed,
-    const std::uint8_t* bytes,
+    const std::uint8_t* const bytes,
     const std::size_t byteLen) noexcept {
 
         for(std::size_t i = 0; i < byteLen; ++i) {

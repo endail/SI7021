@@ -65,8 +65,11 @@ struct UserRegister : std::bitset<8> {
 };
 
 struct UserRegister1 : public UserRegister {
+protected:
+    static const std::uint8_t _DEFAULT_SETTINGS_BITS = 0b00111010;
 
-    UserRegister1(const std::uint8_t bits = SI7021::DEFAULT_SETTINGS_BITS) noexcept;
+public:
+    UserRegister1(const std::uint8_t bits = _DEFAULT_SETTINGS_BITS) noexcept;
 
     std::uint8_t getMeasurementResolution() const noexcept;
     void setMeasurementResolution(const std::uint8_t res);
@@ -81,7 +84,10 @@ struct UserRegister1 : public UserRegister {
 };
 
 struct UserRegister2 : public UserRegister {
-    UserRegister2(const std::uint8_t bits = SI7021::DEFAULT_HEATER_BITS) noexcept;
+protected:
+    static const std::uint8_t _DEFAULT_HEATER_BITS = 0b00000000;
+public:
+    UserRegister2(const std::uint8_t bits = _DEFAULT_HEATER_BITS) noexcept;
     std::uint8_t getHeaterPower() const noexcept;
     void setHeaterPower(const uint8_t power);
     void resetSettings() override;
@@ -128,16 +134,13 @@ protected:
      */
     static std::uint8_t _calc_checksum(
         std::uint8_t seed,
-        const std::uint8_t* bytes,
+        const std::uint8_t* const bytes,
         const std::size_t byteLen) noexcept;
 
 public:
 
     static const int I2C_DEV = 1;
     static const int IC2_ADDR = 0x40;
-
-    static const std::uint8_t DEFAULT_SETTINGS_BITS = 0b00111010;
-    static const std::uint8_t DEFAULT_HEATER_BITS = 0b00000000;
 
     static const std::uint8_t MEASURE_HUM_HOLD_MASTER = 0xE5;
     static const std::uint8_t MEASURE_HUM_NO_HOLD_MASTER = 0xF5;
@@ -175,7 +178,7 @@ public:
      * pg. 5
      */
     void reset();
-    
+
     void resetSettings();
     void resetHeater();
 
