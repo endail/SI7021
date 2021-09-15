@@ -280,7 +280,7 @@ void SI7021::refresh() {
     int code = ::lgI2cReadI2CBlockData(
         this->_handle,
         MEASURE_HUM_HOLD_MASTER,
-        static_cast<const char* const>(data),
+        data,
         sizeof(data));
 
     if(code < 0) {
@@ -307,7 +307,7 @@ void SI7021::refresh() {
     code = ::lgI2cReadI2CBlockData(
         this->_handle,
         READ_TEMP_FROM_PREV_HUM_MEASURE,
-        static_cast<const char* const>(data),
+        data,
         sizeof(data));
 
     if(code < 0) {
