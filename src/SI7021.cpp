@@ -195,9 +195,9 @@ void SI7021::_i2cMultiRead(
         const int code = ::lgI2cSegments(
             this->_handle,
             segs,
-            sizeof(segs));
+            2);
 
-        if(code != sizeof(segs)) {
+        if(code != 2) {
             throw std::runtime_error("I2C read failed");
         }
 
