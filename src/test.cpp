@@ -66,8 +66,8 @@ int main() {
         sensor.refresh();
 
         std::cout 
-            << "Temperature: " << sensor.getTemperature() << " C\n"
-            << "Humidity: " << sensor.getHumidity() << " %RH\n"
+            << "Temperature: " << sensor.getTemperature() << " C, "
+            << "Humidity: " << sensor.getHumidity() << " %RH"
             << "\n";
 
     }
