@@ -34,7 +34,7 @@ int main() {
 
     sensor.setup();
 
-    //std::cout
+    std::cout
 
         //<< "Device: "
         //<< SI7021::SI7021::devIdToString(sensor.getDeviceId()) << "\n"
@@ -54,8 +54,8 @@ int main() {
         //<< "Heater Power: "
         //<< sensor.getHeaterPower() << "\n"
 
-        //<< "Measurement Resolution: "
-        //<< sensor.getMeasurementResolution() << "\n";
+        << "Measurement Resolution: "
+        << sensor.getMeasurementResolution() << "\n";
 
     while(true) {
 
