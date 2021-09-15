@@ -34,7 +34,7 @@ int main() {
 
     sensor.setup();
 
-    std::cout
+    //std::cout
 
         //<< "Device: "
         //<< SI7021::SI7021::devIdToString(sensor.getDeviceId()) << "\n"
@@ -45,17 +45,17 @@ int main() {
         //<< "Serial Number: "
         //<< sensor.getSerialNumber() << "\n"
         
-        << "Vdd Status: "
-        << (sensor.getVddStatus() == VddStatus::OK ? "OK" : "Low") << "\n"
+        //<< "Vdd Status: "
+        //<< (sensor.getVddStatus() == VddStatus::OK ? "OK" : "Low") << "\n"
         
-        << "Heater Status: "
-        << (sensor.getHeaterStatus() == HeaterStatus::ENABLE ? "Enabled" : "Disabled") << "\n"
+        //<< "Heater Status: "
+        //<< (sensor.getHeaterStatus() == HeaterStatus::ENABLE ? "Enabled" : "Disabled") << "\n"
 
-        << "Heater Power: "
-        << sensor.getHeaterPower() << "\n"
+        //<< "Heater Power: "
+        //<< sensor.getHeaterPower() << "\n"
 
-        << "Measurement Resolution: "
-        << sensor.getMeasurementResolution() << "\n";
+        //<< "Measurement Resolution: "
+        //<< sensor.getMeasurementResolution() << "\n";
 
     while(true) {
 
