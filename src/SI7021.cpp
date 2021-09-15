@@ -275,7 +275,7 @@ void SI7021::close() {
 
 void SI7021::refresh() {
 
-    std::uint8_t data[3]{0};
+    char data[3]{0};
 
     int code = ::lgI2cReadI2CBlockData(
         this->_handle,
