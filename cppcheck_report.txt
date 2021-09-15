@@ -1,0 +1,21 @@
+src/SI7021.cpp:261:9: warning: Member variable 'SI7021::_handle' is not initialized in the constructor. [uninitMemberVar]
+SI7021::SI7021(const int dev, const int addr) noexcept :
+        ^
+src/SI7021.cpp:261:9: warning: Member variable 'SI7021::_temperature' is not initialized in the constructor. [uninitMemberVar]
+SI7021::SI7021(const int dev, const int addr) noexcept :
+        ^
+src/SI7021.cpp:261:9: warning: Member variable 'SI7021::_humidity' is not initialized in the constructor. [uninitMemberVar]
+SI7021::SI7021(const int dev, const int addr) noexcept :
+        ^
+include/SI7021.h:61:5: style: Struct 'UserRegister' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    UserRegister(const std::uint8_t v) noexcept;
+    ^
+include/SI7021.h:62:5: style: Struct 'UserRegister' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    UserRegister(const std::bitset<8> bs) noexcept;
+    ^
+src/SI7021.cpp:39:49: performance: Function parameter 'bs' should be passed by const reference. [passedByValue]
+UserRegister::UserRegister(const std::bitset<8> bs) noexcept :
+                                                ^
+include/SI7021.h:62:39: performance: Function parameter 'bs' should be passed by const reference. [passedByValue]
+    UserRegister(const std::bitset<8> bs) noexcept;
+                                      ^
