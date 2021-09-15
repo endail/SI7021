@@ -1,10 +1,10 @@
-src/SI7021.cpp:258:9: warning: Member variable 'SI7021::_handle' is not initialized in the constructor. [uninitMemberVar]
+src/SI7021.cpp:257:9: warning: Member variable 'SI7021::_handle' is not initialized in the constructor. [uninitMemberVar]
 SI7021::SI7021(const int dev, const int addr) noexcept :
         ^
-src/SI7021.cpp:258:9: warning: Member variable 'SI7021::_temperature' is not initialized in the constructor. [uninitMemberVar]
+src/SI7021.cpp:257:9: warning: Member variable 'SI7021::_temperature' is not initialized in the constructor. [uninitMemberVar]
 SI7021::SI7021(const int dev, const int addr) noexcept :
         ^
-src/SI7021.cpp:258:9: warning: Member variable 'SI7021::_humidity' is not initialized in the constructor. [uninitMemberVar]
+src/SI7021.cpp:257:9: warning: Member variable 'SI7021::_humidity' is not initialized in the constructor. [uninitMemberVar]
 SI7021::SI7021(const int dev, const int addr) noexcept :
         ^
 include/SI7021.h:62:5: style: Struct 'UserRegister' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
