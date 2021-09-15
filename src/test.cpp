@@ -55,7 +55,9 @@ int main() {
         << static_cast<int>(sensor.getHeaterPower()) << "\n"
 
         << "Measurement Resolution: "
-        << static_cast<int>(sensor.getMeasurementResolution()) << "\n";
+        << static_cast<int>(sensor.getMeasurementResolution()) << "\n"
+
+        << std::endl;
 
     while(true) {
 

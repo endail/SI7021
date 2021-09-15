@@ -177,7 +177,6 @@ void SI7021::_i2cMultiRead(
     std::uint8_t* const data,
     const std::size_t dataLen) const {
 
-        //TODO: need to 0-init?
         ::lgI2cMsg_t segs[2];
     
         //write
