@@ -134,6 +134,9 @@ protected:
         const std::uint8_t* const bytes,
         const std::size_t byteLen) noexcept;
 
+    static double _rhCodeToHumidity(const std::uint16_t word) noexcept;
+    static double _tempCodeToTemperature(const std::uint16_t word) noexcept;
+
 public:
 
     static const int I2C_DEV = 1;

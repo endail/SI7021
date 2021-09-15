@@ -254,6 +254,16 @@ std::uint8_t SI7021::_calc_checksum(
 
 }
 
+double SI7021::_rhCodeToHumidity(const std::uint16_t word) noexcept {
+    //algo on pg. 21
+    return ((125.0 * word) / 65536.0) - 6;
+}
+
+double SI7021::_tempCodeToTemperature(const std::uint16_t word) noexcept {
+    //algo on pg. 22
+    return ((175.72 * word) / 65536.0) - 46.85;
+}
+
 SI7021::SI7021(const int dev, const int addr) noexcept :
     _device(dev),
     _addr(addr) {
@@ -264,14 +274,23 @@ SI7021::~SI7021() noexcept {
 }
 
 void SI7021::setup() {
+
+    if(this->_handle >= 0) {
+        //already setup
+        return;
+    }
+
     if((this->_handle = ::lgI2cOpen(this->_device, this->_addr, 0)) < 0) {
         throw std::runtime_error("failed to setup SI7021");
     }
+
+
 }
 
 void SI7021::close() {
 
     if(this->_handle == -1) {
+        //already closed
         return;
     }
 
@@ -307,7 +326,7 @@ void SI7021::refresh() {
     }
 
     //read humidity from returned data
-    this->_humidity = (((data[0] * 256 + data[1]) * 125.0) / 65536.0) - 6;
+    this->_humidity = _rhCodeToHumidity(static_cast<std::uint16_t>(data));
 
     //and also grab the temp
 
@@ -324,7 +343,7 @@ void SI7021::refresh() {
         throw std::runtime_error("failed to obtain temperature from refresh");
     }
 
-    this->_temperature = (((data[0] * 256 + data[1]) * 175.72) / 65536.0) - 46.85;
+    this->_temperature = _tempCodeToTemperature(static_cast<std::uint16_t>(data));
 
 }
 
