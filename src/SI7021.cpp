@@ -160,7 +160,7 @@ void SI7021::_set_user_reg_2(const UserRegister2* const reg) {
 }
 
 void SI7021::_i2cMultiRead(
-    std::uint8_t* const cmd,
+    const std::uint8_t* const cmd,
     const std::size_t cmdLen,
     std::uint8_t* const data,
     const std::size_t dataLen) const {
@@ -172,7 +172,7 @@ void SI7021::_i2cMultiRead(
         segs[0].addr = this->_addr;
         segs[0].flags = 0;
         segs[0].len = cmdLen;
-        segs[0].buf = cmd;
+        segs[0].buf = const_cast<std::uint8_t*>(cmd);
 
         //recv
         segs[1].addr = this->_addr;
@@ -274,19 +274,22 @@ void SI7021::close() {
 
 void SI7021::refresh() {
 
-    char data[3]{0};
+    std::uint8_t data[3]{0};
 
     int code = ::lgI2cReadI2CBlockData(
         this->_handle,
         MEASURE_HUM_HOLD_MASTER,
-        data,
+        static_cast<const char* const>(data),
         sizeof(data));
 
     if(code < 0) {
         throw std::runtime_error("");
     }
 
-    const std::uint8_t crc = this->_calc_checksum(0x0, data, 2);
+    const std::uint8_t crc = this->_calc_checksum(
+        0x0,
+        static_cast<const std::uint8_t* const>(data),
+        2);
 
     if(crc != data[2]) {
         throw std::runtime_error("CRC checksum failed");
@@ -303,7 +306,7 @@ void SI7021::refresh() {
     code = ::lgI2cReadI2CBlockData(
         this->_handle,
         READ_TEMP_FROM_PREV_HUM_MEASURE,
-        data,
+        static_cast<const char* const>(data),
         sizeof(data));
 
     if(code < 0) {
