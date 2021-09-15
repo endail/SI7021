@@ -395,7 +395,7 @@ SerialNumber SI7021::getSerialNumber() const {
     std::uint8_t sna[8]{0};
 
     this->_i2cMultiRead(
-        &READ_ELEC_ID_1_BYTE,
+        READ_ELEC_ID_1_BYTE,
         sizeof(READ_ELEC_ID_1_BYTE),
         sna,
         sizeof(sna));
@@ -418,7 +418,7 @@ SerialNumber SI7021::getSerialNumber() const {
     std::uint8_t snb[6]{0};
 
     this->_i2cMultiRead(
-        &READ_ELEC_ID_2_BYTE,
+        READ_ELEC_ID_2_BYTE,
         sizeof(READ_ELEC_ID_2_BYTE),
         snb,
         sizeof(snb));
@@ -452,7 +452,7 @@ DeviceId SI7021::getDeviceId() const {
     std::uint8_t b = 0;
 
     this->_i2cMultiRead(
-        &READ_ELEC_ID_2_BYTE,
+        READ_ELEC_ID_2_BYTE,
         sizeof(READ_ELEC_ID_2_BYTE),
         &b,
         sizeof(b));
@@ -477,7 +477,7 @@ FirmwareRevision SI7021::getFirmwareRevision() const {
     std::uint8_t b = 0;
 
     this->_i2cMultiRead(
-        &READ_FIRMWARE_REV,
+        READ_FIRMWARE_REV,
         sizeof(READ_FIRMWARE_REV),
         &b,
         sizeof(b));
