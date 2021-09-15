@@ -52,9 +52,8 @@ std::uint8_t UserRegister1::getMeasurementResolution() const noexcept {
 
 void UserRegister1::setMeasurementResolution(const std::uint8_t res) {
 
-    //max res is 3
-    if(res > 3) {
-        throw std::invalid_argument("");
+    if(res > _MAX_MEASUREMENT_RESOLUTION) {
+        throw std::range_error("measurement resolution out of range");
     }
 
     this->operator[](7) = res & 0b00000010;
@@ -76,7 +75,6 @@ void UserRegister1::setHeaterStatus(const HeaterStatus status) noexcept {
 
 void UserRegister1::resetSettings() {
     this->reset();
-    //0011_1010
     this->operator[](5) = true;
     this->operator[](4) = true;
     this->operator[](3) = true;
@@ -92,8 +90,8 @@ std::uint8_t UserRegister2::getHeaterPower() const noexcept {
 
 void UserRegister2::setHeaterPower(const uint8_t power) {
 
-    if(power > 16) {
-        throw std::invalid_argument("");
+    if(power > _MAX_HEATER_POWER) {
+        throw std::range_error("heater power out of range");
     }
 
     this->operator[](3) = power & 0b00001000;
@@ -104,7 +102,6 @@ void UserRegister2::setHeaterPower(const uint8_t power) {
 }
 
 void UserRegister2::resetSettings() {
-    //0000_0000
     this->reset();
 }
 
@@ -191,7 +188,7 @@ void SI7021::_i2cMultiRead(
 
         //recv
         segs[1].addr = this->_addr;
-        segs[1].flags = I2C_M_RD | I2C_M_NOSTART; //headers?
+        segs[1].flags = I2C_M_RD | I2C_M_NOSTART;
         segs[1].len = dataLen;
         segs[1].buf = data;
 
@@ -201,7 +198,7 @@ void SI7021::_i2cMultiRead(
             sizeof(segs));
 
         if(code != sizeof(segs)) {
-            throw std::runtime_error("");
+            throw std::runtime_error("I2C read failed");
         }
 
 }
@@ -229,7 +226,7 @@ void SI7021::_i2cMultiWrite(
             1);
 
         if(code != 1) {
-            throw std::runtime_error("");
+            throw std::runtime_error("I2C write failed");
         }
 
 }
@@ -269,7 +266,7 @@ SI7021::~SI7021() noexcept {
 
 void SI7021::setup() {
     if((this->_handle = ::lgI2cOpen(this->_device, this->_addr, 0)) < 0) {
-        throw std::runtime_error("");
+        throw std::runtime_error("failed to setup SI7021");
     }
 }
 
@@ -280,7 +277,7 @@ void SI7021::close() {
     }
 
     if(::lgI2cClose(this->_handle) != 0) {
-        throw std::runtime_error("");
+        throw std::runtime_error("failed to close SI7021");
     }
 
     this->_handle = -1;
@@ -298,7 +295,7 @@ void SI7021::refresh() {
         sizeof(data));
 
     if(code < 0) {
-        throw std::runtime_error("");
+        throw std::runtime_error("failed to refresh data");
     }
 
     const std::uint8_t crc = this->_calc_checksum(
@@ -325,7 +322,7 @@ void SI7021::refresh() {
         sizeof(data));
 
     if(code < 0) {
-        throw std::runtime_error("");
+        throw std::runtime_error("failed to obtain temperature from refresh");
     }
 
     this->_temperature = (((data[0] * 256 + data[1]) * 175.72) / 65536.0) - 46.85;
@@ -493,6 +490,37 @@ FirmwareRevision SI7021::getFirmwareRevision() const {
             return fw;
         default:
             return FirmwareRevision::UNKNOWN;
+    }
+
+}
+
+std::string devIdToString(const DeviceId id) noexcept {
+
+    switch(id) {
+        case DeviceId::ENG_SAMPLE_1:
+        case DeviceId::ENG_SAMPLE_2:
+            return "engineering sample";
+        case DeviceId::SI7013:
+            return "Si7013";
+        case DeviceId::SI7020:
+            return "Si7020";
+        case DeviceId::SI7021:
+            return "Si7021";
+        default:
+            return "unknown";
+    }
+
+}
+
+std::string firmwareRevToString(const FirmwareRevision rev) noexcept {
+
+    switch(rev) {
+        FirmwareRevision::REV_1_0:
+            return "1.0";
+        FirmwareRevision::REV_2_0:
+            return "2.0";
+        default:
+            return "unknown";
     }
 
 }

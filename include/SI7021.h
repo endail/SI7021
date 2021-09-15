@@ -57,6 +57,7 @@ enum class FirmwareRevision : std::uint8_t {
 };
 
 struct UserRegister : std::bitset<8> {
+public:
     UserRegister() noexcept;
     UserRegister(const std::uint8_t v) noexcept;
     UserRegister(const std::bitset<8> bs) noexcept;
@@ -67,25 +68,21 @@ struct UserRegister : std::bitset<8> {
 struct UserRegister1 : public UserRegister {
 protected:
     static const std::uint8_t _DEFAULT_SETTINGS_BITS = 0b00111010;
-
+    static const std::uint8_t _MAX_MEASUREMENT_RESOLUTION = 0b00000011;
 public:
     UserRegister1(const std::uint8_t bits = _DEFAULT_SETTINGS_BITS) noexcept;
-
     std::uint8_t getMeasurementResolution() const noexcept;
     void setMeasurementResolution(const std::uint8_t res);
-
     VddStatus getVddStatus() const noexcept;
-
     HeaterStatus getHeaterStatus() const noexcept;
     void setHeaterStatus(const HeaterStatus status) noexcept;
-
     void resetSettings() override;
-
 };
 
 struct UserRegister2 : public UserRegister {
 protected:
     static const std::uint8_t _DEFAULT_HEATER_BITS = 0b00000000;
+    static const std::uint8_t _MAX_HEATER_POWER = 0b00001111;
 public:
     UserRegister2(const std::uint8_t bits = _DEFAULT_HEATER_BITS) noexcept;
     std::uint8_t getHeaterPower() const noexcept;
@@ -196,6 +193,9 @@ public:
     SerialNumber getSerialNumber() const;
     DeviceId getDeviceId() const;
     FirmwareRevision getFirmwareRevision() const;
+
+    static std::string devIdToString(const DeviceId id) noexcept;
+    static std::string firmwareRevToString(const FirmwareRevision rev) noexcept;
 
 };
 };

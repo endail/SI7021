@@ -21,17 +21,52 @@
 // SOFTWARE.
 
 #include <iostream>
+#include <chrono>
 #include "../include/SI7021.h"
 
 int main() {
 
+    using namespace std;
+
     SI7021::SI7021 sensor;
 
     sensor.setup();
-    sensor.refresh();
 
-    std::cout << sensor.getTemperature() << std::endl;
-    std::cout << sensor.getHumidity() << std::endl;
+    std::cout
+
+        << "Device: "
+        << SI7021::devIdToString(sensor.getDeviceId()) << "\n"
+
+        << "Firmware: "
+        << SI7021::firmwareRevToString(sensor.getFirmwareRevision()) << "\n"
+        
+        << "Serial Number: "
+        << sensor.getSerialNumber() << "\n"
+        
+        << "Vdd Status: "
+        << sensor.getVddStatus() << "\n"
+        
+        << "Heater Status: "
+        << sensor.getHeaterStatus() << "\n"
+
+        << "Heater Power: "
+        << sensor.getHeaterPower() << "\n"
+
+        << "Measurement Resolution: "
+        << sensor.getMeasurementResolution() << "\n";
+
+    while(true) {
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+
+        sensor.refresh();
+
+        std::cout 
+            << "Temperature: " << sensor.getTemperature() << " C\n"
+            << "Humidity: " << sensor.getHumidity() << " %RH\n"
+            << "\n";
+
+    }
 
     return 0;
 
