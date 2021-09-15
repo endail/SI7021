@@ -289,7 +289,7 @@ void SI7021::refresh() {
 
     const std::uint8_t crc = this->_calc_checksum(
         0x0,
-        static_cast<const std::uint8_t* const>(data),
+        reinterpret_cast<const std::uint8_t* const>(data),
         2);
 
     if(crc != data[2]) {
