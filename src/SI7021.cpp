@@ -108,6 +108,20 @@ void UserRegister2::resetSettings() {
     this->reset();
 }
 
+const std::uint8_t SI7021::MEASURE_HUM_HOLD_MASTER = 0xE5;
+const std::uint8_t SI7021::MEASURE_HUM_NO_HOLD_MASTER = 0xF5;
+const std::uint8_t SI7021::MEASURE_TEMP_HOLD_MASTER = 0xE3;
+const std::uint8_t SI7021::MEASURE_TEMP_NO_HOLD_MASTER = 0xF3;
+const std::uint8_t SI7021::READ_TEMP_FROM_PREV_HUM_MEASURE = 0xE0;
+const std::uint8_t SI7021::RESET = 0xFE;
+const std::uint8_t SI7021::WRITE_RHT_USR_REG_1 = 0xE6;
+const std::uint8_t SI7021::READ_RHT_USR_REG_1 = 0xE7;
+const std::uint8_t SI7021::WRITE_HTR_CTRL_REG = 0x51;
+const std::uint8_t SI7021::READ_HTR_CTRL_REG = 0x11;
+const std::uint8_t SI7021::READ_ELEC_ID_1_BYTE[2] = { 0xFA, 0x0F };
+const std::uint8_t SI7021::READ_ELEC_ID_2_BYTE[2] = { 0xFC, 0xC9 };
+const std::uint8_t SI7021::READ_FIRMWARE_REV[2] = { 0x84, 0xB8 };
+
 UserRegister1 SI7021::_read_user_reg_1() const {
 
     std::uint8_t b = 0;
