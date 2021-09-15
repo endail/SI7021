@@ -24,6 +24,7 @@
 #include <cstring>
 #include <cstdint>
 #include <lgpio.h>
+#include <linux/i2c.h>
 #include <linux/i2c-dev.h>
 #include <stdexcept>
 
