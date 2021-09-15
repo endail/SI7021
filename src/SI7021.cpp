@@ -515,9 +515,9 @@ std::string devIdToString(const DeviceId id) noexcept {
 std::string firmwareRevToString(const FirmwareRevision rev) noexcept {
 
     switch(rev) {
-        FirmwareRevision::REV_1_0:
+        case FirmwareRevision::REV_1_0:
             return "1.0";
-        FirmwareRevision::REV_2_0:
+        case FirmwareRevision::REV_2_0:
             return "2.0";
         default:
             return "unknown";

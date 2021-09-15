@@ -20,13 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <iostream>
 #include <chrono>
+#include <iostream>
+#include <thread>
 #include "../include/SI7021.h"
 
 int main() {
 
     using namespace std;
+    using namespace SI7021;
 
     SI7021::SI7021 sensor;
 
