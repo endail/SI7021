@@ -494,7 +494,7 @@ FirmwareRevision SI7021::getFirmwareRevision() const {
 
 }
 
-std::string devIdToString(const DeviceId id) noexcept {
+std::string SI7021::devIdToString(const DeviceId id) noexcept {
 
     switch(id) {
         case DeviceId::ENG_SAMPLE_1:
@@ -512,7 +512,7 @@ std::string devIdToString(const DeviceId id) noexcept {
 
 }
 
-std::string firmwareRevToString(const FirmwareRevision rev) noexcept {
+std::string SI7021::firmwareRevToString(const FirmwareRevision rev) noexcept {
 
     switch(rev) {
         case FirmwareRevision::REV_1_0:
