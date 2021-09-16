@@ -28,6 +28,7 @@
 #include <linux/i2c-dev.h>
 #include <unordered_map>
 #include <stdexcept>
+#include <type_traits>
 
 namespace SI7021 {
 
@@ -329,7 +330,7 @@ void SI7021::refresh() {
 
     this->_i2cMultiRead(
         _CMD_REGS.at(Command::MEASURE_HUM_HOLD_MASTER),
-        sizeof(+(_CMD_REGS.at(Command::MEASURE_HUM_HOLD_MASTER))),
+        std::extent<decltype(_CMD_REGS.at(Command::MEASURE_HUM_HOLD_MASTER))>::value,
         data,
         sizeof(data));
 
@@ -357,7 +358,7 @@ void SI7021::refresh() {
 
     this->_i2cMultiRead(
         _CMD_REGS.at(Command::READ_TEMP_FROM_PREV_HUM_MEASURE),
-        sizeof(+(_CMD_REGS.at(Command::READ_TEMP_FROM_PREV_HUM_MEASURE))),
+        std::extent<decltype(_CMD_REGS.at(Command::READ_TEMP_FROM_PREV_HUM_MEASURE))>::value,
         data,
         sizeof(data));
 
