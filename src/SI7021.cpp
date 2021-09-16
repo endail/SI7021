@@ -361,10 +361,6 @@ void SI7021::refresh() {
         data,
         sizeof(data));
 
-    if(code < 0) {
-        throw std::runtime_error("failed to obtain temperature from refresh");
-    }
-
     this->_temperature = _tempCodeToTemperature(
         static_cast<std::uint16_t>(data[0]) << 8 |
         static_cast<std::uint16_t>(data[1])
@@ -383,7 +379,7 @@ double SI7021::getHumidity() const noexcept {
 void SI7021::reset() {
     this->_i2cMultiWrite(
         _CMD_REGS.at(Command::RESET),
-        sizeof(_CMD_REGS.at(Command::RESET));
+        sizeof(_CMD_REGS.at(Command::RESET)));
 }
 
 void SI7021::resetSettings() {
