@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace SI7021 {
 
@@ -133,14 +134,12 @@ protected:
     void _set_user_reg_2(const HeaterControlRegister* const reg);
 
     void _i2cMultiRead(
-        const std::uint8_t* const cmd,
-        const std::size_t cmdLen,
+        const Command cmd,
         std::uint8_t* const data,
         const std::size_t dataLen) const;
 
     void _i2cMultiWrite(
-        const std::uint8_t* const cmd,
-        const std::size_t cmdLen,
+        const Command cmd,
         const std::uint8_t* const data = nullptr,
         const std::size_t dataLen = 0) const;
 

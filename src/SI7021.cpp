@@ -28,7 +28,6 @@
 #include <linux/i2c-dev.h>
 #include <unordered_map>
 #include <stdexcept>
-#include <type_traits>
 
 namespace SI7021 {
 
@@ -143,8 +142,7 @@ UserRegister1 SI7021::_read_user_reg_1() const {
     std::uint8_t b = 0;
 
     this->_i2cMultiRead(
-        _CMD_REGS.at(Command::READ_RHT_USR_REG_1),
-        sizeof(_CMD_REGS.at(Command::READ_RHT_USR_REG_1)),
+        Command::READ_RHT_USR_REG_1,
         &b,
         sizeof(b));
 
@@ -157,8 +155,7 @@ void SI7021::_set_user_reg_1(const UserRegister1* const reg) {
     const std::uint8_t b = reg->to_uint8_t();
 
     this->_i2cMultiWrite(
-        _CMD_REGS.at(Command::WRITE_RHT_USR_REG_1),
-        sizeof(_CMD_REGS.at(Command::WRITE_RHT_USR_REG_1)),
+        Command::WRITE_RHT_USR_REG_1,
         &b,
         sizeof(b));
 
@@ -169,8 +166,7 @@ HeaterControlRegister SI7021::_read_user_reg_2() const {
     std::uint8_t b = 0;
 
     this->_i2cMultiRead(
-        _CMD_REGS.at(Command::READ_HTR_CTRL_REG),
-        sizeof(_CMD_REGS.at(Command::READ_HTR_CTRL_REG)),
+        Command::READ_HTR_CTRL_REG,
         &b,
         sizeof(b));
 
@@ -183,16 +179,14 @@ void SI7021::_set_user_reg_2(const HeaterControlRegister* const reg) {
     const std::uint8_t b = reg->to_uint8_t();
 
     this->_i2cMultiWrite(
-        _CMD_REGS.at(Command::WRITE_HTR_CTRL_REG),
-        sizeof(_CMD_REGS.at(Command::WRITE_HTR_CTRL_REG)),
+        Command::WRITE_HTR_CTRL_REG,
         &b,
         sizeof(b));
 
 }
 
 void SI7021::_i2cMultiRead(
-    const std::uint8_t* const cmd,
-    const std::size_t cmdLen,
+    const Command cmd,
     std::uint8_t* const data,
     const std::size_t dataLen) const {
 
@@ -201,8 +195,8 @@ void SI7021::_i2cMultiRead(
         //write
         segs[0].addr = this->_addr;
         segs[0].flags = 0;
-        segs[0].len = cmdLen;
-        segs[0].buf = const_cast<std::uint8_t*>(cmd);
+        segs[0].len = _CMD_REGS.at(cmd).size();
+        segs[0].buf = _CMD_REGS.at(CMD).data();
 
         //recv
         segs[1].addr = this->_addr;
@@ -222,20 +216,19 @@ void SI7021::_i2cMultiRead(
 }
 
 void SI7021::_i2cMultiWrite(
-    const std::uint8_t* const cmd,
-    const std::size_t cmdLen,
+    const Command cmd,
     const std::uint8_t* const data,
     const std::size_t dataLen) const {
 
         ::lgI2cMsg_t seg;
 
-        std::uint8_t buff[cmdLen + dataLen];
-        std::memcpy(buff, cmd, cmdLen);
-        std::memcpy(buff + cmdLen, data, dataLen);
+        std::uint8_t buff[_CMD_REGS.at(cmd).size() + dataLen];
+        std::memcpy(buff, _CMD_REGS.at(cmd).data(), _CMD_REGS.at(cmd).size());
+        std::memcpy(buff + _CMD_REGS.at(cmd).size(), data, dataLen);
 
         seg.addr = this->_addr;
         seg.flags = 0;
-        seg.len = cmdLen + dataLen;
+        seg.len = _CMD_REGS.at(cmd).size() + dataLen;
         seg.buf = buff;
 
         const auto code = ::lgI2cSegments(
@@ -329,8 +322,7 @@ void SI7021::refresh() {
     std::uint8_t data[3];
 
     this->_i2cMultiRead(
-        _CMD_REGS.at(Command::MEASURE_HUM_HOLD_MASTER).data(),
-        _CMD_REGS.at(Command::MEASURE_HUM_HOLD_MASTER).size(),
+        Command::MEASURE_HUM_HOLD_MASTER,
         data,
         sizeof(data));
 
@@ -357,8 +349,7 @@ void SI7021::refresh() {
     std::memset(data, 0, sizeof(data));
 
     this->_i2cMultiRead(
-        _CMD_REGS.at(Command::READ_TEMP_FROM_PREV_HUM_MEASURE).data(),
-        _CMD_REGS.at(Command::READ_TEMP_FROM_PREV_HUM_MEASURE).size(),
+        Command::READ_TEMP_FROM_PREV_HUM_MEASURE,
         data,
         sizeof(data));
 
@@ -378,9 +369,7 @@ double SI7021::getHumidity() const noexcept {
 }
 
 void SI7021::reset() {
-    this->_i2cMultiWrite(
-        _CMD_REGS.at(Command::RESET),
-        sizeof(_CMD_REGS.at(Command::RESET)));
+    this->_i2cMultiWrite(Command::RESET);
 }
 
 void SI7021::resetSettings() {
@@ -435,8 +424,7 @@ SerialNumber SI7021::getSerialNumber() const {
     std::uint8_t sna[8];
 
     this->_i2cMultiRead(
-        _CMD_REGS.at(Command::READ_ELEC_ID_1_BYTE),
-        sizeof(_CMD_REGS.at(Command::READ_ELEC_ID_1_BYTE)),
+        Command::READ_ELEC_ID_1_BYTE,
         sna,
         sizeof(sna));
 
@@ -458,8 +446,7 @@ SerialNumber SI7021::getSerialNumber() const {
     std::uint8_t snb[6];
 
     this->_i2cMultiRead(
-        _CMD_REGS.at(Command::READ_ELEC_ID_2_BYTE),
-        sizeof(_CMD_REGS.at(Command::READ_ELEC_ID_2_BYTE)),
+        Command::READ_ELEC_ID_2_BYTE,
         snb,
         sizeof(snb));
 
@@ -492,8 +479,7 @@ DeviceId SI7021::getDeviceId() const {
     std::uint8_t b = 0;
 
     this->_i2cMultiRead(
-        _CMD_REGS.at(Command::READ_ELEC_ID_2_BYTE),
-        sizeof(_CMD_REGS.at(Command::READ_ELEC_ID_2_BYTE)),
+        Command::READ_ELEC_ID_2_BYTE,
         &b,
         sizeof(b));
 
@@ -517,8 +503,7 @@ FirmwareRevision SI7021::getFirmwareRevision() const {
     std::uint8_t b = 0;
 
     this->_i2cMultiRead(
-        _CMD_REGS.at(Command::READ_FIRMWARE_REV),
-        sizeof(_CMD_REGS.at(Command::READ_FIRMWARE_REV)),
+        Command::READ_FIRMWARE_REV,
         &b,
         sizeof(b));
 
