@@ -196,7 +196,9 @@ void SI7021::_i2cMultiRead(
         segs[0].addr = this->_addr;
         segs[0].flags = 0;
         segs[0].len = _CMD_REGS.at(cmd).size();
-        segs[0].buf = reinterpret_cast<std::uint8_t*>(_CMD_REGS.at(cmd).data());
+        segs[0].buf = reinterpret_cast<char*>(
+            const_cast<std::uint8_t*>(
+                _CMD_REGS.at(cmd).data()));
 
         //recv
         segs[1].addr = this->_addr;
