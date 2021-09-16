@@ -304,7 +304,7 @@ void SI7021::close() {
 
 void SI7021::refresh() {
 
-    char data[3]{0};
+    char data[2]{0};
 
     int code = ::lgI2cReadI2CBlockData(
         this->_handle,
@@ -326,7 +326,10 @@ void SI7021::refresh() {
     }
 
     //read humidity from returned data
-    this->_humidity = _rhCodeToHumidity(static_cast<std::uint16_t>(data));
+    this->_humidity = _rhCodeToHumidity(
+        static_cast<std::uint16_t>(data[0]) << 8 | 
+        static_cast<std::uint16_t>(data[1])
+        );
 
     //and also grab the temp
 
@@ -343,7 +346,10 @@ void SI7021::refresh() {
         throw std::runtime_error("failed to obtain temperature from refresh");
     }
 
-    this->_temperature = _tempCodeToTemperature(static_cast<std::uint16_t>(data));
+    this->_temperature = _tempCodeToTemperature(
+        static_cast<std::uint16_t>(data[0]) << 8 |
+        static_cast<std::uint16_t>(data[1])
+        );
 
 }
 
