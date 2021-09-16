@@ -142,7 +142,7 @@ UserRegister1 SI7021::_read_user_reg_1() const {
     std::uint8_t b = 0;
 
     this->_i2cMultiRead(
-        &_CMD_REGS.at(Command::READ_RHT_USR_REG_1),
+        _CMD_REGS.at(Command::READ_RHT_USR_REG_1),
         sizeof(_CMD_REGS.at(Command::READ_RHT_USR_REG_1)),
         &b,
         sizeof(b));
@@ -156,7 +156,7 @@ void SI7021::_set_user_reg_1(const UserRegister1* const reg) {
     const std::uint8_t b = reg->to_uint8_t();
 
     this->_i2cMultiWrite(
-        &_CMD_REGS.at(Command::WRITE_RHT_USR_REG_1),
+        _CMD_REGS.at(Command::WRITE_RHT_USR_REG_1),
         sizeof(_CMD_REGS.at(Command::WRITE_RHT_USR_REG_1)),
         &b,
         sizeof(b));
@@ -168,7 +168,7 @@ HeaterControlRegister SI7021::_read_user_reg_2() const {
     std::uint8_t b = 0;
 
     this->_i2cMultiRead(
-        &_CMD_REGS.at(Command::READ_HTR_CTRL_REG),
+        _CMD_REGS.at(Command::READ_HTR_CTRL_REG),
         sizeof(_CMD_REGS.at(Command::READ_HTR_CTRL_REG),
         &b,
         sizeof(b));
@@ -182,7 +182,7 @@ void SI7021::_set_user_reg_2(const HeaterControlRegister* const reg) {
     const std::uint8_t b = reg->to_uint8_t();
 
     this->_i2cMultiWrite(
-        &_CMD_REGS.at(Command::WRITE_HTR_CTRL_REG),
+        _CMD_REGS.at(Command::WRITE_HTR_CTRL_REG),
         sizeof(_CMD_REGS.at(Command::WRITE_HTR_CTRL_REG),
         &b,
         sizeof(b));
@@ -386,7 +386,7 @@ double SI7021::getHumidity() const noexcept {
 
 void SI7021::reset() {
     this->_i2cMultiWrite(
-        &_CMD_REGS.at(Command::RESET),
+        _CMD_REGS.at(Command::RESET),
         sizeof(_CMD_REGS.at(Command::RESET));
 }
 
