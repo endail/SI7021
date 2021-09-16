@@ -40,7 +40,7 @@ int main() {
         << SI7021::SI7021::devIdToString(sensor.getDeviceId()) << "\n"
 
         << "Firmware: "
-        << SI7021::SI7021::firmwareRevToString(sensor.getFirmwareRevision()) << "\n"
+        << SI7021::SI7021::fwRevToString(sensor.getFirmwareRevision()) << "\n"
         
         << "Serial Number: "
         << sensor.getSerialNumber() << "\n"
@@ -58,6 +58,8 @@ int main() {
         << static_cast<int>(sensor.getMeasurementResolution()) << "\n"
 
         << std::endl;
+
+    sensor.setMeasurementResolution(1);
 
     while(true) {
 

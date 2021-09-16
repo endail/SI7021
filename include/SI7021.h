@@ -79,8 +79,7 @@ public:
     UserRegister() noexcept;
     UserRegister(const std::uint8_t v) noexcept;
     UserRegister(const std::bitset<8> bs) noexcept;
-    virtual void resetSettings() = 0;
-    std::uint8_t to_uint8_t() const noexcept;
+    std::uint8_t toByte() const noexcept;
 };
 
 struct UserRegister1 : public UserRegister {
@@ -94,7 +93,6 @@ public:
     VddStatus getVddStatus() const noexcept;
     HeaterStatus getHeaterStatus() const noexcept;
     void setHeaterStatus(const HeaterStatus status) noexcept;
-    void resetSettings() override;
 };
 
 struct HeaterControlRegister : public UserRegister {
@@ -105,7 +103,6 @@ public:
     HeaterControlRegister(const std::uint8_t bits = _DEFAULT_HEATER_BITS) noexcept;
     std::uint8_t getHeaterPower() const noexcept;
     void setHeaterPower(const uint8_t power);
-    void resetSettings() override;
 };
 
 class SI7021 {
@@ -137,8 +134,8 @@ protected:
 
     void _i2cMultiRead(
         const Command cmd,
-        std::uint8_t* const data,
-        const std::size_t dataLen) const;
+        std::uint8_t* const data = nullptr,
+        const std::size_t dataLen = 0) const;
 
     void _i2cMultiWrite(
         const Command cmd,
@@ -165,12 +162,6 @@ public:
     void setup();
     void close();
 
-    /**
-     * Measurement takes time depending on bit resolution
-     * https://www.silabs.com/documents/public/data-sheets/Si7021-A20.pdf
-     * pg. 5
-     * Max time would be 12ms + 10.8ms = 22.8ms
-     */
     void refresh();
     double getTemperature() const noexcept;
     double getHumidity() const noexcept;
@@ -201,7 +192,7 @@ public:
     FirmwareRevision getFirmwareRevision() const;
 
     static const char* const devIdToString(const DeviceId id) noexcept;
-    static const char* const firmwareRevToString(const FirmwareRevision rev) noexcept;
+    static const char* const fwRevToString(const FirmwareRevision rev) noexcept;
 
 };
 };

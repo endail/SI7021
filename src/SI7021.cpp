@@ -40,7 +40,7 @@ UserRegister::UserRegister(const std::uint8_t v) noexcept :
 UserRegister::UserRegister(const std::bitset<8> bs) noexcept :
     UserRegister(static_cast<std::uint8_t>(bs.to_ulong())) { }
 
-std::uint8_t UserRegister::to_uint8_t() const noexcept {
+std::uint8_t UserRegister::toByte() const noexcept {
     return static_cast<std::uint8_t>(this->to_ulong());
 }
 
@@ -74,14 +74,6 @@ void UserRegister1::setHeaterStatus(const HeaterStatus status) noexcept {
     this->operator[](2) = static_cast<bool>(status);
 }
 
-void UserRegister1::resetSettings() {
-    this->reset();
-    this->operator[](5) = true;
-    this->operator[](4) = true;
-    this->operator[](3) = true;
-    this->operator[](1) = true;
-}
-
 HeaterControlRegister::HeaterControlRegister(const std::uint8_t bits) noexcept :
     UserRegister(bits) { }
 
@@ -100,10 +92,6 @@ void HeaterControlRegister::setHeaterPower(const uint8_t power) {
     this->operator[](1) = power & 0b00000010;
     this->operator[](0) = power & 0b00000001;
 
-}
-
-void HeaterControlRegister::resetSettings() {
-    this->reset();
 }
 
 const std::unordered_map<const Command, SI7021::_REG_LIST> SI7021::_CMD_REGS({
@@ -138,51 +126,25 @@ const std::unordered_map<const FirmwareRevision, const char* const> SI7021::_FW_
 });
 
 UserRegister1 SI7021::_read_user_reg_1() const {
-
     std::uint8_t b = 0;
-
-    this->_i2cMultiRead(
-        Command::READ_RHT_USR_REG_1,
-        &b,
-        sizeof(b));
-
+    this->_i2cMultiRead(Command::READ_RHT_USR_REG_1, &b, sizeof(b));
     return UserRegister1(b);
-
 }
 
 void SI7021::_set_user_reg_1(const UserRegister1* const reg) {
-
-    const std::uint8_t b = reg->to_uint8_t();
-
-    this->_i2cMultiWrite(
-        Command::WRITE_RHT_USR_REG_1,
-        &b,
-        sizeof(b));
-
+    const std::uint8_t b = reg->toByte();
+    this->_i2cMultiWrite(Command::WRITE_RHT_USR_REG_1, &b, sizeof(b));
 }
 
 HeaterControlRegister SI7021::_read_user_reg_2() const {
-
     std::uint8_t b = 0;
-
-    this->_i2cMultiRead(
-        Command::READ_HTR_CTRL_REG,
-        &b,
-        sizeof(b));
-
+    this->_i2cMultiRead(Command::READ_HTR_CTRL_REG, &b, sizeof(b));
     return HeaterControlRegister(b);
-
 }
 
 void SI7021::_set_user_reg_2(const HeaterControlRegister* const reg) {
-
-    const std::uint8_t b = reg->to_uint8_t();
-
-    this->_i2cMultiWrite(
-        Command::WRITE_HTR_CTRL_REG,
-        &b,
-        sizeof(b));
-
+    const std::uint8_t b = reg->toByte();
+    this->_i2cMultiWrite(Command::WRITE_HTR_CTRL_REG, &b, sizeof(b));
 }
 
 void SI7021::_i2cMultiRead(
@@ -196,8 +158,7 @@ void SI7021::_i2cMultiRead(
         segs[0].addr = this->_addr;
         segs[0].flags = 0;
         segs[0].len = _CMD_REGS.at(cmd).size();
-        segs[0].buf = const_cast<std::uint8_t*>(
-            _CMD_REGS.at(cmd).data());
+        segs[0].buf = const_cast<std::uint8_t*>(_CMD_REGS.at(cmd).data());
 
         //recv
         segs[1].addr = this->_addr;
@@ -322,15 +283,8 @@ void SI7021::refresh() {
 
     std::uint8_t data[3];
 
-    this->_i2cMultiRead(
-        Command::MEASURE_HUM_HOLD_MASTER,
-        data,
-        sizeof(data));
-
-    const auto crc = this->_calc_checksum(
-        0x0,
-        data,
-        2);
+    this->_i2cMultiRead(Command::MEASURE_HUM_HOLD_MASTER, data, sizeof(data));
+    const auto crc = this->_calc_checksum(0, data, 2);
 
     if(crc != data[2]) {
         throw std::runtime_error("CRC checksum failed");
@@ -344,15 +298,11 @@ void SI7021::refresh() {
 
     //and also grab the temp
 
-    //clear data arr
     //note: data[2] was only used for previous crc;
     //there is no crc for this read
-    std::memset(data, 0, sizeof(data));
 
     this->_i2cMultiRead(
-        Command::READ_TEMP_FROM_PREV_HUM_MEASURE,
-        data,
-        sizeof(data));
+        Command::READ_TEMP_FROM_PREV_HUM_MEASURE, data, sizeof(data) - 1);
 
     this->_temperature = _tempCodeToTemperature(
         static_cast<std::uint16_t>(data[0]) << 8 |
@@ -424,10 +374,7 @@ SerialNumber SI7021::getSerialNumber() const {
     //first read
     std::uint8_t sna[8];
 
-    this->_i2cMultiRead(
-        Command::READ_ELEC_ID_1_BYTE,
-        sna,
-        sizeof(sna));
+    this->_i2cMultiRead(Command::READ_ELEC_ID_1_BYTE, sna, sizeof(sna));
 
     const auto crcSna3 = _calc_checksum(    0x0, &sna[0], 1);
     const auto crcSna2 = _calc_checksum(crcSna3, &sna[2], 1);
@@ -446,10 +393,7 @@ SerialNumber SI7021::getSerialNumber() const {
     //second read
     std::uint8_t snb[6];
 
-    this->_i2cMultiRead(
-        Command::READ_ELEC_ID_2_BYTE,
-        snb,
-        sizeof(snb));
+    this->_i2cMultiRead(Command::READ_ELEC_ID_2_BYTE, snb, sizeof(snb));
 
     const auto crcSnb2 = _calc_checksum(    0x0, &snb[0], 2);
     const auto crcSnb0 = _calc_checksum(crcSnb2, &snb[3], 2);
@@ -469,7 +413,8 @@ SerialNumber SI7021::getSerialNumber() const {
         static_cast<std::uint64_t>(snb[0]) << 24 |
         static_cast<std::uint64_t>(snb[1]) << 16 |
         static_cast<std::uint64_t>(snb[3]) << 8  |
-        static_cast<std::uint64_t>(snb[4]);
+        static_cast<std::uint64_t>(snb[4])
+    ;
 
     return sn;
 
@@ -479,10 +424,7 @@ DeviceId SI7021::getDeviceId() const {
 
     std::uint8_t b = 0;
 
-    this->_i2cMultiRead(
-        Command::READ_ELEC_ID_2_BYTE,
-        &b,
-        sizeof(b));
+    this->_i2cMultiRead(Command::READ_ELEC_ID_2_BYTE, &b,sizeof(b));
 
     const auto id = static_cast<DeviceId>(b);
 
@@ -503,10 +445,7 @@ FirmwareRevision SI7021::getFirmwareRevision() const {
 
     std::uint8_t b = 0;
 
-    this->_i2cMultiRead(
-        Command::READ_FIRMWARE_REV,
-        &b,
-        sizeof(b));
+    this->_i2cMultiRead(Command::READ_FIRMWARE_REV, &b, sizeof(b));
 
     const auto fw = static_cast<FirmwareRevision>(b);
 
@@ -524,7 +463,7 @@ const char* const SI7021::devIdToString(const DeviceId id) noexcept {
     return _DEV_STRS.at(id);
 }
 
-const char* const SI7021::firmwareRevToString(const FirmwareRevision rev) noexcept {
+const char* const SI7021::fwRevToString(const FirmwareRevision rev) noexcept {
     return _FW_STRS.at(rev);
 }
 
