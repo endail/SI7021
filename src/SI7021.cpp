@@ -325,21 +325,17 @@ void SI7021::close() {
 
 void SI7021::refresh() {
 
-    char data[3];
+    std::uint8_t data[3];
 
-    auto code = ::lgI2cReadI2CBlockData(
-        this->_handle,
+    this->_i2cMultiRead(
         _CMD_REGS.at(Command::MEASURE_HUM_HOLD_MASTER),
+        sizeof(_CMD_REGS.at(Command::MEASURE_HUM_HOLD_MASTER)),
         data,
         sizeof(data));
 
-    if(code < 0) {
-        throw std::runtime_error("failed to refresh data");
-    }
-
     const auto crc = this->_calc_checksum(
         0x0,
-        reinterpret_cast<const std::uint8_t* const>(data),
+        data,
         2);
 
     if(crc != data[2]) {
@@ -359,9 +355,9 @@ void SI7021::refresh() {
     //there is no crc for this read
     std::memset(data, 0, sizeof(data));
 
-    code = ::lgI2cReadI2CBlockData(
-        this->_handle,
+    this->_i2cMultiRead(
         _CMD_REGS.at(Command::READ_TEMP_FROM_PREV_HUM_MEASURE),
+        sizeof(_CMD_REGS.at(Command::READ_TEMP_FROM_PREV_HUM_MEASURE)),
         data,
         sizeof(data));
 
