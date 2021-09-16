@@ -34,7 +34,6 @@ int main() {
 
     sensor.setup();
 
-/*
     std::cout
 
         << "Device: "
@@ -59,7 +58,6 @@ int main() {
         << static_cast<int>(sensor.getMeasurementResolution()) << "\n"
 
         << std::endl;
-*/
 
     while(true) {
 
