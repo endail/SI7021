@@ -107,16 +107,16 @@ void HeaterControlRegister::resetSettings() {
 }
 
 const std::unordered_map<const Command, const std::uint8_t* const> SI7021::_CMD_REGS({
-    { Command::MEASURE_HUM_HOLD_MASTER,         (std::uint8_t){ 0xe5 } },
-    { Command::MEASURE_HUM_NO_HOLD_MASTER,      (std::uint8_t){ 0xf5 } },
-    { Command::MEASURE_TEMP_HOLD_MASTER,        (std::uint8_t){ 0xe3 } },
-    { Command::MEASURE_TEMP_NO_HOLD_MASTER,     (std::uint8_t){ 0xf3 } },
-    { Command::READ_TEMP_FROM_PREV_HUM_MEASURE, (std::uint8_t){ 0xe0 } },
-    { Command::RESET,                           (std::uint8_t){ 0xfe } },
-    { Command::WRITE_RHT_USR_REG_1,             (std::uint8_t){ 0xe6 } },
-    { Command::READ_RHT_USR_REG_1,              (std::uint8_t){ 0xe7 } },
-    { Command::WRITE_HTR_CTRL_REG,              (std::uint8_t){ 0x51 } },
-    { Command::READ_HTR_CTRL_REG,               (std::uint8_t){ 0x11 } },
+    { Command::MEASURE_HUM_HOLD_MASTER,         (std::uint8_t[]){ 0xe5 } },
+    { Command::MEASURE_HUM_NO_HOLD_MASTER,      (std::uint8_t[]){ 0xf5 } },
+    { Command::MEASURE_TEMP_HOLD_MASTER,        (std::uint8_t[]){ 0xe3 } },
+    { Command::MEASURE_TEMP_NO_HOLD_MASTER,     (std::uint8_t[]){ 0xf3 } },
+    { Command::READ_TEMP_FROM_PREV_HUM_MEASURE, (std::uint8_t[]){ 0xe0 } },
+    { Command::RESET,                           (std::uint8_t[]){ 0xfe } },
+    { Command::WRITE_RHT_USR_REG_1,             (std::uint8_t[]){ 0xe6 } },
+    { Command::READ_RHT_USR_REG_1,              (std::uint8_t[]){ 0xe7 } },
+    { Command::WRITE_HTR_CTRL_REG,              (std::uint8_t[]){ 0x51 } },
+    { Command::READ_HTR_CTRL_REG,               (std::uint8_t[]){ 0x11 } },
     { Command::READ_ELEC_ID_1_BYTE,             (std::uint8_t[]){ 0xf1, 0x0f } },
     { Command::READ_ELEC_ID_2_BYTE,             (std::uint8_t[]){ 0xfc, 0xc9 } },
     { Command::READ_FIRMWARE_REV,               (std::uint8_t[]){ 0x84, 0xb8 } }
