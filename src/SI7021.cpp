@@ -117,9 +117,9 @@ const std::unordered_map<const Command, const std::uint8_t* const> SI7021::_CMD_
     { Command::READ_RHT_USR_REG_1,              (std::uint8_t){ 0xe7 } },
     { Command::WRITE_HTR_CTRL_REG,              (std::uint8_t){ 0x51 } },
     { Command::READ_HTR_CTRL_REG,               (std::uint8_t){ 0x11 } },
-    { Command::READ_ELEC_ID_1_BYTE,             (std::uint8_t*){ 0xf1, 0x0f } },
-    { Command::READ_ELEC_ID_2_BYTE,             (std::uint8_t*){ 0xfc, 0xc9 } },
-    { Command::READ_FIRMWARE_REV,               (std::uint8_t*){ 0x84, 0xb8 } }
+    { Command::READ_ELEC_ID_1_BYTE,             (std::uint8_t[]){ 0xf1, 0x0f } },
+    { Command::READ_ELEC_ID_2_BYTE,             (std::uint8_t[]){ 0xfc, 0xc9 } },
+    { Command::READ_FIRMWARE_REV,               (std::uint8_t[]){ 0x84, 0xb8 } }
 });
 
 const std::unordered_map<const DeviceId, const char* const> SI7021::_DEV_STRS({
