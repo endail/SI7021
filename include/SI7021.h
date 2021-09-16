@@ -55,8 +55,8 @@ enum class VddStatus : bool {
 };
 
 enum class HeaterStatus : bool {
-    DISABLE = false,
-    ENABLE = true
+    DISABLED = false,
+    ENABLED = true
 };
 
 enum class DeviceId : std::uint8_t {

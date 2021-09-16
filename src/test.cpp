@@ -49,7 +49,7 @@ int main() {
         << (sensor.getVddStatus() == VddStatus::OK ? "OK" : "Low") << "\n"
         
         << "Heater Status: "
-        << (sensor.getHeaterStatus() == HeaterStatus::ENABLE ? "Enabled" : "Disabled") << "\n"
+        << (sensor.getHeaterStatus() == HeaterStatus::ENABLED ? "Enabled" : "Disabled") << "\n"
 
         << "Heater Power: "
         << static_cast<int>(sensor.getHeaterPower()) << "\n"
