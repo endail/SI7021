@@ -1,12 +1,12 @@
-include/SI7021.h:79:5: style: Struct 'UserRegister' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+include/SI7021.h:80:5: style: Struct 'UserRegister' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
     UserRegister(const std::uint8_t v) noexcept;
     ^
-include/SI7021.h:80:5: style: Struct 'UserRegister' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+include/SI7021.h:81:5: style: Struct 'UserRegister' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
     UserRegister(const std::bitset<8> bs) noexcept;
     ^
-src/SI7021.cpp:41:49: performance: Function parameter 'bs' should be passed by const reference. [passedByValue]
+src/SI7021.cpp:40:49: performance: Function parameter 'bs' should be passed by const reference. [passedByValue]
 UserRegister::UserRegister(const std::bitset<8> bs) noexcept :
                                                 ^
-include/SI7021.h:80:39: performance: Function parameter 'bs' should be passed by const reference. [passedByValue]
+include/SI7021.h:81:39: performance: Function parameter 'bs' should be passed by const reference. [passedByValue]
     UserRegister(const std::bitset<8> bs) noexcept;
                                       ^
