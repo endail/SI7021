@@ -117,7 +117,9 @@ class SI7021 {
 
 protected:
 
-    static const std::unordered_map<const Command, const std::vector<std::uint8_t>> _CMD_REGS;
+    typedef const std::vector<std::uint8_t> _REG_LIST;
+
+    static const std::unordered_map<const Command, _REG_LIST> _CMD_REGS;
     static const std::unordered_map<const DeviceId, const char* const> _DEV_STRS;
     static const std::unordered_map<const FirmwareRevision, const char* const> _FW_STRS;
 
