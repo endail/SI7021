@@ -106,7 +106,7 @@ void HeaterControlRegister::resetSettings() {
     this->reset();
 }
 
-const std::unordered_map<const Command, _REG_LIST> SI7021::_CMD_REGS({
+const std::unordered_map<const Command, SI27021::_REG_LIST> SI7021::_CMD_REGS({
     { Command::MEASURE_HUM_HOLD_MASTER,         (SI27021::_REG_LIST){ 0xe5 } },
     { Command::MEASURE_HUM_NO_HOLD_MASTER,      (SI27021::_REG_LIST){ 0xf5 } },
     { Command::MEASURE_TEMP_HOLD_MASTER,        (SI27021::_REG_LIST){ 0xe3 } },
