@@ -107,19 +107,19 @@ void HeaterControlRegister::resetSettings() {
 }
 
 const std::unordered_map<const Command, const std::uint8_t* const> SI7021::_CMD_REGS({
-    { Command::MEASURE_HUM_HOLD_MASTER,         { 0xe5 } },
-    { Command::MEASURE_HUM_NO_HOLD_MASTER,      { 0xf5 } },
-    { Command::MEASURE_TEMP_HOLD_MASTER,        { 0xe3 } },
-    { Command::MEASURE_TEMP_NO_HOLD_MASTER,     { 0xf3 } },
-    { Command::READ_TEMP_FROM_PREV_HUM_MEASURE, { 0xe0 } },
-    { Command::RESET,                           { 0xfe } },
-    { Command::WRITE_RHT_USR_REG_1,             { 0xe6 } },
-    { Command::READ_RHT_USR_REG_1,              { 0xe7 } },
-    { Command::WRITE_HTR_CTRL_REG,              { 0x51 } },
-    { Command::READ_HTR_CTRL_REG,               { 0x11 } },
-    { Command::READ_ELEC_ID_1_BYTE,             { 0xf1, 0x0f } },
-    { Command::READ_ELEC_ID_2_BYTE,             { 0xfc, 0xc9 } },
-    { Command::READ_FIRMWARE_REV,               { 0x84, 0xb8 } }
+    { Command::MEASURE_HUM_HOLD_MASTER,         (const std::uint8_t* const){ 0xe5 } },
+    { Command::MEASURE_HUM_NO_HOLD_MASTER,      (const std::uint8_t* const){ 0xf5 } },
+    { Command::MEASURE_TEMP_HOLD_MASTER,        (const std::uint8_t* const){ 0xe3 } },
+    { Command::MEASURE_TEMP_NO_HOLD_MASTER,     (const std::uint8_t* const){ 0xf3 } },
+    { Command::READ_TEMP_FROM_PREV_HUM_MEASURE, (const std::uint8_t* const){ 0xe0 } },
+    { Command::RESET,                           (const std::uint8_t* const){ 0xfe } },
+    { Command::WRITE_RHT_USR_REG_1,             (const std::uint8_t* const){ 0xe6 } },
+    { Command::READ_RHT_USR_REG_1,              (const std::uint8_t* const){ 0xe7 } },
+    { Command::WRITE_HTR_CTRL_REG,              (const std::uint8_t* const){ 0x51 } },
+    { Command::READ_HTR_CTRL_REG,               (const std::uint8_t* const){ 0x11 } },
+    { Command::READ_ELEC_ID_1_BYTE,             (const std::uint8_t* const){ 0xf1, 0x0f } },
+    { Command::READ_ELEC_ID_2_BYTE,             (const std::uint8_t* const){ 0xfc, 0xc9 } },
+    { Command::READ_FIRMWARE_REV,               (const std::uint8_t* const){ 0x84, 0xb8 } }
 });
 
 const std::unordered_map<const DeviceId, const char* const> SI7021::_DEV_STRS({
