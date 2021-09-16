@@ -26,8 +26,25 @@
 #include <bitset>
 #include <cstdint>
 #include <string>
+#include <unordered_map>
 
 namespace SI7021 {
+
+enum class Command {
+    MEASURE_HUM_HOLD_MASTER,
+    MEASURE_HUM_NO_HOLD_MASTER,
+    MEASURE_TEMP_HOLD_MASTER,
+    MEASURE_TEMP_NO_HOLD_MASTER,
+    READ_TEMP_FROM_PREV_HUM_MEASURE,
+    RESET,
+    WRITE_RHT_USR_REG_1,
+    READ_RHT_USR_REG_1,
+    WRITE_HTR_CTRL_REG,
+    READ_HTR_CTRL_REG,
+    READ_ELEC_ID_1_BYTE,
+    READ_ELEC_ID_2_BYTE,
+    READ_FIRMWARE_REV
+};
 
 typedef std::uint64_t SerialNumber;
 
@@ -79,12 +96,12 @@ public:
     void resetSettings() override;
 };
 
-struct UserRegister2 : public UserRegister {
+struct HeaterControlRegister : public UserRegister {
 protected:
     static const std::uint8_t _DEFAULT_HEATER_BITS = 0b00000000;
     static const std::uint8_t _MAX_HEATER_POWER = 0b00001111;
 public:
-    UserRegister2(const std::uint8_t bits = _DEFAULT_HEATER_BITS) noexcept;
+    HeaterControlRegister(const std::uint8_t bits = _DEFAULT_HEATER_BITS) noexcept;
     std::uint8_t getHeaterPower() const noexcept;
     void setHeaterPower(const uint8_t power);
     void resetSettings() override;
@@ -99,18 +116,21 @@ class SI7021 {
 
 protected:
 
+    static const std::unordered_map<const Command, const std::uint8_t* const> _CMD_REGS;
+    static const std::unordered_map<const DeviceId, const char* const> _DEV_STRS;
+    static const std::unordered_map<const FirmwareRevision, const char* const> _FW_STRS;
+
     int _handle;
     const int _device;
     const int _addr;
-
     double _temperature;
     double _humidity;
 
     UserRegister1 _read_user_reg_1() const;
     void _set_user_reg_1(const UserRegister1* const reg);
 
-    UserRegister2 _read_user_reg_2() const;
-    void _set_user_reg_2(const UserRegister2* const reg);
+    HeaterControlRegister _read_user_reg_2() const;
+    void _set_user_reg_2(const HeaterControlRegister* const reg);
 
     void _i2cMultiRead(
         const std::uint8_t* const cmd,
@@ -124,11 +144,6 @@ protected:
         const std::uint8_t* const data = nullptr,
         const std::size_t dataLen = 0) const;
 
-    /**
-     * https://github.com/d2r2/go-si7021/blob/master/utils.go
-     * https://www.silabs.com/community/sensors/forum.topic.html/how_to_calculatecrc-sCTY
-     * https://circuitpython.readthedocs.io/projects/si7021/en/latest/_modules/adafruit_si7021.html
-     */
     static std::uint8_t _calc_checksum(
         std::uint8_t seed,
         const std::uint8_t* const bytes,
@@ -137,24 +152,11 @@ protected:
     static double _rhCodeToHumidity(const std::uint16_t word) noexcept;
     static double _tempCodeToTemperature(const std::uint16_t word) noexcept;
 
+
 public:
 
     static const int I2C_DEV = 1;
     static const int IC2_ADDR = 0x40;
-
-    static const std::uint8_t MEASURE_HUM_HOLD_MASTER = 0xE5;
-    static const std::uint8_t MEASURE_HUM_NO_HOLD_MASTER = 0xF5;
-    static const std::uint8_t MEASURE_TEMP_HOLD_MASTER = 0xE3;
-    static const std::uint8_t MEASURE_TEMP_NO_HOLD_MASTER = 0xF3;
-    static const std::uint8_t READ_TEMP_FROM_PREV_HUM_MEASURE = 0xE0;
-    static const std::uint8_t RESET = 0xFE;
-    static const std::uint8_t WRITE_RHT_USR_REG_1 = 0xE6;
-    static const std::uint8_t READ_RHT_USR_REG_1 = 0xE7;
-    static const std::uint8_t WRITE_HTR_CTRL_REG = 0x51;
-    static const std::uint8_t READ_HTR_CTRL_REG = 0x11;
-    static const std::uint8_t READ_ELEC_ID_1_BYTE[2];
-    static const std::uint8_t READ_ELEC_ID_2_BYTE[2];
-    static const std::uint8_t READ_FIRMWARE_REV[2];
 
     SI7021(const int dev = I2C_DEV, const int addr = IC2_ADDR) noexcept;
     virtual ~SI7021();
@@ -197,8 +199,8 @@ public:
     DeviceId getDeviceId() const;
     FirmwareRevision getFirmwareRevision() const;
 
-    static std::string devIdToString(const DeviceId id) noexcept;
-    static std::string firmwareRevToString(const FirmwareRevision rev) noexcept;
+    static const char* const devIdToString(const DeviceId id) noexcept;
+    static const char* const firmwareRevToString(const FirmwareRevision rev) noexcept;
 
 };
 };
