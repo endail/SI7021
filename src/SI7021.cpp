@@ -169,7 +169,7 @@ HeaterControlRegister SI7021::_read_user_reg_2() const {
 
     this->_i2cMultiRead(
         _CMD_REGS.at(Command::READ_HTR_CTRL_REG),
-        sizeof(_CMD_REGS.at(Command::READ_HTR_CTRL_REG),
+        sizeof(_CMD_REGS.at(Command::READ_HTR_CTRL_REG)),
         &b,
         sizeof(b));
 
@@ -183,7 +183,7 @@ void SI7021::_set_user_reg_2(const HeaterControlRegister* const reg) {
 
     this->_i2cMultiWrite(
         _CMD_REGS.at(Command::WRITE_HTR_CTRL_REG),
-        sizeof(_CMD_REGS.at(Command::WRITE_HTR_CTRL_REG),
+        sizeof(_CMD_REGS.at(Command::WRITE_HTR_CTRL_REG)),
         &b,
         sizeof(b));
 
@@ -443,7 +443,7 @@ SerialNumber SI7021::getSerialNumber() const {
 
     this->_i2cMultiRead(
         _CMD_REGS.at(Command::READ_ELEC_ID_1_BYTE),
-        sizeof(_CMD_REGS.at(Command::READ_ELEC_ID_1_BYTE),
+        sizeof(_CMD_REGS.at(Command::READ_ELEC_ID_1_BYTE)),
         sna,
         sizeof(sna));
 
