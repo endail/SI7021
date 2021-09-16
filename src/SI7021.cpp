@@ -304,7 +304,7 @@ void SI7021::close() {
 
 void SI7021::refresh() {
 
-    char data[2]{0};
+    char data[3]{0};
 
     int code = ::lgI2cReadI2CBlockData(
         this->_handle,
@@ -334,6 +334,8 @@ void SI7021::refresh() {
     //and also grab the temp
 
     //clear data arr
+    //note: data[2] was only used for previous crc;
+    //there is no crc for this read
     std::memset(data, 0, sizeof(data));
 
     code = ::lgI2cReadI2CBlockData(
