@@ -106,20 +106,20 @@ void HeaterControlRegister::resetSettings() {
     this->reset();
 }
 
-const std::unordered_map<const Command, SI27021::_REG_LIST> SI7021::_CMD_REGS({
-    { Command::MEASURE_HUM_HOLD_MASTER,         (SI27021::_REG_LIST){ 0xe5 } },
-    { Command::MEASURE_HUM_NO_HOLD_MASTER,      (SI27021::_REG_LIST){ 0xf5 } },
-    { Command::MEASURE_TEMP_HOLD_MASTER,        (SI27021::_REG_LIST){ 0xe3 } },
-    { Command::MEASURE_TEMP_NO_HOLD_MASTER,     (SI27021::_REG_LIST){ 0xf3 } },
-    { Command::READ_TEMP_FROM_PREV_HUM_MEASURE, (SI27021::_REG_LIST){ 0xe0 } },
-    { Command::RESET,                           (SI27021::_REG_LIST){ 0xfe } },
-    { Command::WRITE_RHT_USR_REG_1,             (SI27021::_REG_LIST){ 0xe6 } },
-    { Command::READ_RHT_USR_REG_1,              (SI27021::_REG_LIST){ 0xe7 } },
-    { Command::WRITE_HTR_CTRL_REG,              (SI27021::_REG_LIST){ 0x51 } },
-    { Command::READ_HTR_CTRL_REG,               (SI27021::_REG_LIST){ 0x11 } },
-    { Command::READ_ELEC_ID_1_BYTE,             (SI27021::_REG_LIST){ 0xf1, 0x0f } },
-    { Command::READ_ELEC_ID_2_BYTE,             (SI27021::_REG_LIST){ 0xfc, 0xc9 } },
-    { Command::READ_FIRMWARE_REV,               (SI27021::_REG_LIST){ 0x84, 0xb8 } }
+const std::unordered_map<const Command, SI7021::_REG_LIST> SI7021::_CMD_REGS({
+    { Command::MEASURE_HUM_HOLD_MASTER,         (SI7021::_REG_LIST){ 0xe5 } },
+    { Command::MEASURE_HUM_NO_HOLD_MASTER,      (SI7021::_REG_LIST){ 0xf5 } },
+    { Command::MEASURE_TEMP_HOLD_MASTER,        (SI7021::_REG_LIST){ 0xe3 } },
+    { Command::MEASURE_TEMP_NO_HOLD_MASTER,     (SI7021::_REG_LIST){ 0xf3 } },
+    { Command::READ_TEMP_FROM_PREV_HUM_MEASURE, (SI7021::_REG_LIST){ 0xe0 } },
+    { Command::RESET,                           (SI7021::_REG_LIST){ 0xfe } },
+    { Command::WRITE_RHT_USR_REG_1,             (SI7021::_REG_LIST){ 0xe6 } },
+    { Command::READ_RHT_USR_REG_1,              (SI7021::_REG_LIST){ 0xe7 } },
+    { Command::WRITE_HTR_CTRL_REG,              (SI7021::_REG_LIST){ 0x51 } },
+    { Command::READ_HTR_CTRL_REG,               (SI7021::_REG_LIST){ 0x11 } },
+    { Command::READ_ELEC_ID_1_BYTE,             (SI7021::_REG_LIST){ 0xf1, 0x0f } },
+    { Command::READ_ELEC_ID_2_BYTE,             (SI7021::_REG_LIST){ 0xfc, 0xc9 } },
+    { Command::READ_FIRMWARE_REV,               (SI7021::_REG_LIST){ 0x84, 0xb8 } }
 });
 
 const std::unordered_map<const DeviceId, const char* const> SI7021::_DEV_STRS({
