@@ -330,7 +330,7 @@ void SI7021::refresh() {
 
     this->_i2cMultiRead(
         _CMD_REGS.at(Command::MEASURE_HUM_HOLD_MASTER),
-        _CMD_REGS.at(Command::MEASURE_HUM_HOLD_MASTER).size(),
+        decltype(_CMD_REGS.at(Command::MEASURE_HUM_HOLD_MASTER))::size(),
         data,
         sizeof(data));
 
@@ -358,7 +358,7 @@ void SI7021::refresh() {
 
     this->_i2cMultiRead(
         _CMD_REGS.at(Command::READ_TEMP_FROM_PREV_HUM_MEASURE),
-        _CMD_REGS.at(Command::READ_TEMP_FROM_PREV_HUM_MEASURE).size(),
+        decltype(_CMD_REGS.at(Command::READ_TEMP_FROM_PREV_HUM_MEASURE))::size(),
         data,
         sizeof(data));
 
