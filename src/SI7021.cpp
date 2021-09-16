@@ -265,8 +265,11 @@ double SI7021::_tempCodeToTemperature(const std::uint16_t word) noexcept {
 }
 
 SI7021::SI7021(const int dev, const int addr) noexcept :
+    _handle(-1),
     _device(dev),
-    _addr(addr) {
+    _addr(addr),
+    _temperature(0.0),
+    _humidity(0.0) {
 }
 
 SI7021::~SI7021() noexcept {
