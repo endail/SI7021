@@ -53,9 +53,7 @@ int main() {
 
 - `void reset( )`. Reset the device.
 
-- `void resetSettings( )`. Reset UserRegister1 register (ie. measurement resolution and heater status).
-
-- `void resetHeater( )`. Reset HeaterControlRegister register (ie. heater power).
+- `void resetSettings( )`. Reset UserRegister1 register (ie. measurement resolution and heater status) and HeaterControlRegister register (ie. heater power).
 
 - `std::uint8_t getMeasurementResolution( )`. Returns the measurement resolution from the device, between 0 and 3.
 
@@ -95,6 +93,3 @@ int main() {
 - `const char* const devIdToString( DeviceId id )`. Returns a C string representing the device id.
 
 - `const char* const fwRevToString( FirmwareRevision rev )`. Returns a C string representing the firmware revision.
-
-
-
