@@ -324,11 +324,11 @@ void SI7021::reset() {
 
 void SI7021::resetSettings() {
 
-    const UserRegister1 reg;
-    this->_set_user_reg_1(&reg);
+    const UserRegister1 reg1;
+    this->_set_user_reg_1(&reg1);
 
-    const HeaterControlRegister reg;
-    this->_set_user_reg_2(&reg);
+    const HeaterControlRegister reg2;
+    this->_set_user_reg_2(&reg2);
 
 }
 
