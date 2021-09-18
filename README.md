@@ -9,6 +9,8 @@
 ## Example
 
 ```cpp
+#include "SI7021.h"
+
 SI7021::SI7021 sensor;
 sensor.setup();
 sensor.refresh();

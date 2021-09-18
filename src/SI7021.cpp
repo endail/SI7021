@@ -78,10 +78,10 @@ HeaterControlRegister::HeaterControlRegister(const std::uint8_t bits) noexcept :
     UserRegister(bits) { }
 
 std::uint8_t HeaterControlRegister::getHeaterPower() const noexcept {
-    return this->to_ulong() & 0b00001111;
+    return static_cast<std::uint8_t>(this->to_ulong()) & 0b00001111;
 }
 
-void HeaterControlRegister::setHeaterPower(const uint8_t power) {
+void HeaterControlRegister::setHeaterPower(const std::uint8_t power) {
 
     if(power > _MAX_HEATER_POWER) {
         throw std::range_error("heater power out of range");
@@ -132,7 +132,7 @@ UserRegister1 SI7021::_read_user_reg_1() const {
 }
 
 void SI7021::_set_user_reg_1(const UserRegister1* const reg) {
-    const std::uint8_t b = reg->toByte();
+    const auto b = reg->toByte();
     this->_i2cMultiWrite(Command::WRITE_RHT_USR_REG_1, &b, sizeof(b));
 }
 
@@ -143,7 +143,7 @@ HeaterControlRegister SI7021::_read_user_reg_2() const {
 }
 
 void SI7021::_set_user_reg_2(const HeaterControlRegister* const reg) {
-    const std::uint8_t b = reg->toByte();
+    const auto b = reg->toByte();
     this->_i2cMultiWrite(Command::WRITE_HTR_CTRL_REG, &b, sizeof(b));
 }
 
@@ -297,7 +297,6 @@ void SI7021::refresh() {
         );
 
     //and also grab the temp
-
     //note: data[2] was only used for previous crc;
     //there is no crc for this read
 
@@ -324,13 +323,13 @@ void SI7021::reset() {
 }
 
 void SI7021::resetSettings() {
+
     const UserRegister1 reg;
     this->_set_user_reg_1(&reg);
-}
 
-void SI7021::resetHeater() {
     const HeaterControlRegister reg;
     this->_set_user_reg_2(&reg);
+
 }
 
 std::uint8_t SI7021::getMeasurementResolution() const {

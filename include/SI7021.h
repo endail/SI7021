@@ -172,9 +172,7 @@ public:
      * pg. 5
      */
     void reset();
-
     void resetSettings();
-    void resetHeater();
 
     std::uint8_t getMeasurementResolution() const;
     void setMeasurementResolution(const std::uint8_t res = 0);
