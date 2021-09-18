@@ -10,17 +10,31 @@
 
 ```cpp
 #include "SI7021.h"
+#include <iostream>
 
-SI7021::SI7021 sensor;
-sensor.setup();
-sensor.refresh();
+int main() {
 
-std::cout 
-    << "Temperature: "
-    << sensor.getTemperature() << " C, "
-    << "Humidity: "
-    << sensor.getHumidity() << " %RH"
-    << std::endl;
+    SI7021::SI7021 sensor;
+
+    //connect to and initalise the sensor
+    sensor.setup();
+
+    //obtain new temperature and humidity readings
+    sensor.refresh();
+
+    std::cout 
+        << "Temperature: "
+        << sensor.getTemperature() << " C, "
+        << "Humidity: "
+        << sensor.getHumidity() << " %RH"
+        << std::endl;
+
+    //prints eg.
+    //Temperature: 16.0205 C, Humidity: 62.8667 %RH
+
+    return 0;
+
+}
 ```
 
 ## Documentation
