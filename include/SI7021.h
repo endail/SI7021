@@ -77,8 +77,8 @@ enum class FirmwareRevision : std::uint8_t {
 struct UserRegister : std::bitset<8> {
 public:
     UserRegister() noexcept;
-    UserRegister(const std::uint8_t v) noexcept;
-    UserRegister(const std::bitset<8> bs) noexcept;
+    explicit UserRegister(const std::uint8_t v) noexcept;
+    explicit UserRegister(const std::bitset<8>& bs) noexcept;
     std::uint8_t toByte() const noexcept;
 };
 
