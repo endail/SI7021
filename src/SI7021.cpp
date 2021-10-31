@@ -166,12 +166,12 @@ void SI7021::_i2cMultiRead(
         segs[1].len = dataLen;
         segs[1].buf = data;
 
-        const auto code = ::lgI2cSegments(
+        const auto segsTx = ::lgI2cSegments(
             this->_handle,
             segs,
-            2);
+            sizeof(segs));
 
-        if(code != 2) {
+        if(segsTx != sizeof(segs)) {
             throw std::runtime_error("I2C read failed");
         }
 
@@ -193,12 +193,12 @@ void SI7021::_i2cMultiWrite(
         seg.len = _CMD_REGS.at(cmd).size() + dataLen;
         seg.buf = buff;
 
-        const auto code = ::lgI2cSegments(
+        const auto segsTx = ::lgI2cSegments(
             this->_handle,
             &seg,
-            1);
+            sizeof(seg));
 
-        if(code != 1) {
+        if(code != sizeof(seg)) {
             throw std::runtime_error("I2C write failed");
         }
 
@@ -230,12 +230,14 @@ std::uint8_t SI7021::_calc_checksum(
 
 double SI7021::_rhCodeToHumidity(const std::uint16_t word) noexcept {
     //algo on pg. 21
-    return ((125.0 * word) / 65536.0) - 6;
+    const auto h = ((125.0 * word) / 65536.0) - 6;
+    return static_cast<double>(h);
 }
 
 double SI7021::_tempCodeToTemperature(const std::uint16_t word) noexcept {
     //algo on pg. 22
-    return ((175.72 * word) / 65536.0) - 46.85;
+    const auto t = ((175.72 * word) / 65536.0) - 46.85;
+    return static_cast<double>(t);
 }
 
 SI7021::SI7021(const int dev, const int addr) noexcept :
@@ -247,32 +249,36 @@ SI7021::SI7021(const int dev, const int addr) noexcept :
 }
 
 SI7021::~SI7021() noexcept {
-    this->close();
+
+    try {
+        this->disconnect();
+    }
+    catch(...) {
+        //prevent propagation
+    }
+
 }
 
-void SI7021::setup() {
+void SI7021::connect() {
 
     if(this->_handle >= 0) {
-        //already setup
         return;
     }
 
     if((this->_handle = ::lgI2cOpen(this->_device, this->_addr, 0)) < 0) {
-        throw std::runtime_error("failed to setup SI7021");
+        throw std::runtime_error("failed to connect to SI7021");
     }
-
 
 }
 
-void SI7021::close() {
+void SI7021::disconnect() {
 
-    if(this->_handle == -1) {
-        //already closed
+    if(this->_handle < 0) {
         return;
     }
 
-    if(::lgI2cClose(this->_handle) != 0) {
-        throw std::runtime_error("failed to close SI7021");
+    if(::lgI2cClose(this->_handle) < 0) {
+        throw std::runtime_error("failed to disconnect from SI7021");
     }
 
     this->_handle = -1;
@@ -423,7 +429,7 @@ DeviceId SI7021::getDeviceId() const {
 
     std::uint8_t b = 0;
 
-    this->_i2cMultiRead(Command::READ_ELEC_ID_2_BYTE, &b,sizeof(b));
+    this->_i2cMultiRead(Command::READ_ELEC_ID_2_BYTE, &b, sizeof(b));
 
     const auto id = static_cast<DeviceId>(b);
 

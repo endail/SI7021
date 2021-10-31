@@ -159,8 +159,8 @@ public:
     SI7021(const int dev = I2C_DEV, const int addr = IC2_ADDR) noexcept;
     virtual ~SI7021();
 
-    void setup();
-    void close();
+    void connect();
+    void disconnect();
 
     void refresh();
     double getTemperature() const noexcept;
