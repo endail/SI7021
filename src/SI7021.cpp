@@ -37,7 +37,7 @@ UserRegister::UserRegister() noexcept :
 UserRegister::UserRegister(const std::uint8_t v) noexcept :
     std::bitset<8>(v) { }
 
-UserRegister::UserRegister(const std::bitset<8> bs) noexcept :
+UserRegister::UserRegister(const std::bitset<8>& bs) noexcept :
     UserRegister(static_cast<std::uint8_t>(bs.to_ulong())) { }
 
 std::uint8_t UserRegister::toByte() const noexcept {
