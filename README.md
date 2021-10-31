@@ -41,9 +41,9 @@ int main() {
 
 - `SI7021( int dev, int addr )`. Constructor taking `dev` identifying which I2C device to use (default is device 1), and `addr` identifying which `I2C` address to use (default is 0x40).
 
-- `void setup( )`. Setup and connect to the device.
+- `void connect( )`. Setup and connect to the device.
 
-- `void close( )`. Disconnect from the device.
+- `void disconnect( )`. Disconnect from the device.
 
 - `void refresh( )`. Get a humidity and temperature sample from the sensor.
 
