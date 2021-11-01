@@ -17,7 +17,7 @@ int main() {
     SI7021::SI7021 sensor;
 
     //connect to and initialise the sensor
-    sensor.setup();
+    sensor.connect();
 
     //obtain new temperature and humidity readings
     sensor.refresh();

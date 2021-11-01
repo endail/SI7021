@@ -196,9 +196,9 @@ void SI7021::_i2cMultiWrite(
         const auto segsTx = ::lgI2cSegments(
             this->_handle,
             &seg,
-            sizeof(seg));
+            1);
 
-        if(code != sizeof(seg)) {
+        if(segsTx != 1) {
             throw std::runtime_error("I2C write failed");
         }
 

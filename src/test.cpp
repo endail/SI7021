@@ -32,7 +32,7 @@ int main() {
 
     SI7021::SI7021 sensor;
 
-    sensor.setup();
+    sensor.connect();
 
     std::cout
 
